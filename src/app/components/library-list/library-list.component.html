@@ -1,0 +1,67 @@
+<div class="container my-4">
+  <!-- Спиннер -->
+  <div *ngIf="isLoading" class="d-flex flex-column">
+    <div class="spinner-border text-primary mx-auto" role="status">
+      <span class="visually-hidden">Загрузка...</span>
+    </div>
+    <div class="text-primary mx-auto mt-4">
+      <span>Загрузка данных с сервера</span>
+    </div>
+  </div>
+
+  <div *ngIf="!isLoading" class="py-4">
+    <!-- Картинка -->
+    <div class="text-center mb-4">
+      <img
+        src="/night-sky.jpg"
+        class="img-fluid rounded"
+        alt="Night Sky"
+        style="max-height: 400px; object-fit: cover;"
+      />
+    </div>
+
+    <!-- Поисковая форма -->
+    <div class="input-group input-group-lg mb-3 w-75 mx-auto">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Введите слово для поиска..."
+        [(ngModel)]="searchTerm"
+      />
+      <button
+        class="btn btn-primary"
+        type="button"
+        (click)="filterLibraries()"
+      >
+        Найти библиотеки
+      </button>
+    </div>
+
+    <!-- Таблица результатов -->
+    <table class="table table-striped w-75 mx-auto" *ngIf="filteredLibraries.length > 0">
+      <thead class="table-dark">
+      <tr>
+        <th>#</th>
+        <th>Название</th>
+        <th>Адрес</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr
+        *ngFor="let lib of filteredLibraries; let i = index"
+        (click)="goToDetails(lib)"
+        style="cursor: pointer;"
+      >
+        <td>{{ i + 1 }}</td>
+        <td [innerHTML]="highlight(lib.FullName)"></td>
+        <td>{{ lib.ObjectAddress?.[0]?.Address }}</td>
+      </tr>
+      </tbody>
+    </table>
+
+    <!-- Сообщение, если ничего не найдено -->
+    <div *ngIf="isLoading && filteredLibraries.length === 0">
+      Ничего не найдено
+    </div>
+  </div>
+</div>
